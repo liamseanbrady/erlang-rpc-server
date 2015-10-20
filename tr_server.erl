@@ -61,3 +61,17 @@ get_count() ->
 %%---------------------------------------------------------------------------------
 stop() ->
   gen_server:cast(?SERVER, stop).
+
+
+%%%---------------------------------------------------------------------------------
+%%% gen_server callbacks
+%%%---------------------------------------------------------------------------------
+init([Port]) ->
+  {ok, LSock} = gen_tcp:listen(Port, [{active, true}]),
+  {ok, #state{port=Port, lsock=LSock}, 0}.
+
+handle_call(get_count, _From, State) ->
+  {reply, {ok, State#state.request_count}, State}.
+
+handle_cast(stop, State) ->
+  {stop, normal, State}.
