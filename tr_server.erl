@@ -10,10 +10,11 @@
 %%%---------------------------------------------------------------------------------
 
 -module(tr_server).
+-include_lib("eunit/include/eunit.hrl").
 -behaviour(gen_server).
 
 %% API
--export([]).
+-export([start_link/1, start_link/0, get_count/0, stop/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
@@ -116,3 +117,9 @@ args_to_terms(RawArgs) ->
   {ok, Args} = erl_parse:parse_term(Toks),
   Args.
       
+%%%---------------------------------------------------------------------------------
+%%% Tests
+%%%---------------------------------------------------------------------------------
+
+start_test() ->
+  {ok, _} = tr_server:start_link(1055).
