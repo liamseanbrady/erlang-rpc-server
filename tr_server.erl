@@ -97,10 +97,10 @@ do_rpc(Socket, RawData) ->
   try
     {M, F, A} = split_out_mfa(RawData),
     Result = apply(M, F, A),
-    gen_tcp:send(Socket, io:fwrite("~p~n", [Result]))
+    gen_tcp:send(Socket, io_lib:fwrite("~p~n", [Result]))
   catch
     _Class:Err ->
-      gen_tcp:send(Socket, io:fwrite("~p~n", [Err]))
+      gen_tcp:send(Socket, io_lib:fwrite("~p~n", [Err]))
   end.
 
 split_out_mfa(RawData) ->
