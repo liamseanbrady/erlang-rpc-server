@@ -75,3 +75,17 @@ handle_call(get_count, _From, State) ->
 
 handle_cast(stop, State) ->
   {stop, normal, State}.
+
+handle_info({tcp, Socket, RawData}, State) ->
+  do_rpc(Socket, RawData),
+  RequestCount = State#state.request_count,
+  {noreply, State#state{request_count = RequestCount + 1}};
+handle_info(timeout, #state{lsock = LSock} = State) ->
+  {ok, _Sock} = gen_tcp:accept(LSock),
+  {noreply, State}.
+
+terminate(_Reason, _State) ->
+  ok.
+
+code_change(_OldVsn, State, _Extra) ->
+  {ok, State}.
